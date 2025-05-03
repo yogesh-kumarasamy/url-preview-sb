@@ -1,0 +1,4 @@
+.focus-visible\:focus-ring {
+  box-shadow: none !important;
+  outline: none !important;
+}
