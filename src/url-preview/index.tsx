@@ -29,6 +29,7 @@ const ActionPill = ({
   metaData,
   actionPillOptions,
   className = "",
+  ...rest
 }: ActionPillProps) => {
   const [popOverText, setPopoverText] = useState<ActionPopOverText>(
     actionPillOptions
@@ -90,7 +91,7 @@ const ActionPill = ({
   };
 
   return (
-    <Box as="div" className={classes}>
+    <Box as="div" className={classes} {...rest}>
       {actionPillOptions
         ?.filter((action) => action?.onlyShow?.(metaData) ?? true)
         ?.map((action, index) => (
@@ -135,7 +136,7 @@ const ActionPill = ({
 };
 
 const LoaderSkeleton = () => (
-  <Box className="w-full py-2">
+  <Box className="w-full py-2" data-testid="loader-skeleton">
     <Box
       as="article"
       className="flex w-[90%] border-l-[3px] border-solid border-secondary pl-4"
@@ -215,8 +216,10 @@ const Overlay = () => {
 //                     metaData={metaData}
 //                     actionPillOptions={actionPillOptions}
 //                     className={`absolute bottom-1 right-1 ${
-//                       isHovered ? "" : "none"
+//                       isHovered ? "" : "hidden"
 //                     } `}
+//                    data-testid="action-pill"
+
 //                   />
 //                   <Overlay />
 //                 </>
@@ -317,6 +320,7 @@ const SingleColumnLayout = ({
                   className="h-[20px] w-[20px] object-cover object-center"
                   alt={metaData.title}
                   src={metaData.iconSrc}
+                  data-testid="favicon"
                 />
               )
             }
@@ -325,6 +329,7 @@ const SingleColumnLayout = ({
               className="text-secondary text-body-12 line-clamp-1 hover:text-secondary"
               href={metaData.url}
               variant="neutralSecondary"
+              data-testid="source"
             >
               {metaData.source}
             </TextLink>
@@ -335,11 +340,13 @@ const SingleColumnLayout = ({
           <Box
             as="figure"
             className={`${imageContainerClass} relative z-10 mt-0.5 overflow-hidden`}
+            data-testid="preview-image-container"
           >
             <Image
               className="absolute inset-0 h-full w-full object-cover object-center"
               alt={metaData.title}
               src={metaData.imageUrl}
+              data-testid="preview-image"
             />
             {hiddenPreviewElements?.actionPill ? null : (
               <ActionPill
@@ -348,6 +355,7 @@ const SingleColumnLayout = ({
                 className={`absolute bottom-2 right-2 ${
                   isHovered ? "" : "hidden"
                 }`}
+                data-testid="action-pill"
               />
             )}
             <Overlay />
@@ -361,6 +369,7 @@ const SingleColumnLayout = ({
               className={`absolute right-2 top-1/2 -translate-y-1/2 transform ${
                 isHovered ? "" : "hidden"
               }`}
+              data-testid="action-pill"
             />
           ))}
       </Stack>
@@ -375,7 +384,7 @@ const FallbackPreview = ({
 }: FallbackPreviewCompProps) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
-    <Box {...props} className="w-full py-2">
+    <Box {...props} className="w-full py-2" data-testid="fallback-preview">
       <Box
         as="article"
         className="flex relative w-full cursor-pointer border-l-[3px] border-solid border-secondary pl-4"
