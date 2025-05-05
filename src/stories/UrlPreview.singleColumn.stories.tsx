@@ -1,12 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { userEvent, within } from "@storybook/test";
-import {
-  token,
-  getMetaDataEndpoint,
-  CopyAction,
-  ShareAction,
-  AddToLearn,
-} from "../util";
+import { token, getMetaDataEndpoint } from "../util";
 
 declare global {
   interface Window {
@@ -14,12 +8,7 @@ declare global {
   }
 }
 import { UrlPreview } from "../url-preview";
-import {
-  AdaptiveUFilledIcon,
-  AdaptiveUIcon,
-  ClipboardCopyIcon,
-  ShareIcon,
-} from "@adaptavant/eds-core";
+import { actionPillOptions } from "../url-preview/testUtil";
 const meta = {
   component: UrlPreview,
   title: "UrlPreview/Single Column Visual States",
@@ -27,54 +16,7 @@ const meta = {
   args: {
     accessToken: window?.token || token,
     metadataApiUrl: getMetaDataEndpoint("staging"),
-    actionPillOptions: [
-      {
-        id: "copy",
-        popOverText: "Copy",
-        icons: { initialState: ClipboardCopyIcon },
-        clickHandler: ({
-          metaData,
-          clickedActionPillOption,
-          updatePopoverText,
-        }) => {
-          CopyAction({
-            metaData,
-            clickedActionPillOption,
-            updatePopoverText,
-          });
-        },
-      },
-      {
-        id: "share",
-        popOverText: "Share",
-        icons: { initialState: ShareIcon },
-        clickHandler: ({ metaData }) => {
-          ShareAction(metaData);
-        },
-      },
-      {
-        id: "addToLearn",
-        popOverText: "Add To Learn",
-        icons: {
-          initialState: AdaptiveUIcon,
-          successState: AdaptiveUFilledIcon,
-        },
-        clickHandler: ({
-          metaData,
-          clickedActionPillOption,
-          updatePopoverText,
-          updateSuccessStateForIconSwap,
-        }) => {
-          AddToLearn({
-            metaData,
-            clickedActionPillOption,
-            updatePopoverText,
-            updateSuccessStateForIconSwap,
-          });
-        },
-        onlyShow: (metaData) => Boolean(metaData.adaptiveuMeta),
-      },
-    ],
+    actionPillOptions: actionPillOptions,
   },
 } satisfies Meta<typeof UrlPreview>;
 export default meta;
