@@ -339,7 +339,7 @@ const SingleColumnLayout = ({
         {metaData.imageUrl && (
           <Box
             as="figure"
-            className={`${imageContainerClass} relative z-10 mt-0.5 overflow-hidden`}
+            className={`${imageContainerClass} relative mt-0.5 overflow-hidden`}
             data-testid="preview-image-container"
           >
             <Image
@@ -352,13 +352,13 @@ const SingleColumnLayout = ({
               <ActionPill
                 metaData={metaData}
                 actionPillOptions={actionPillOptions}
-                className={`absolute bottom-2 right-2 ${
+                className={`absolute bottom-2 right-2 z-50 ${
                   isHovered ? "" : "hidden"
                 }`}
                 data-testid="action-pill"
               />
             )}
-            <Overlay />
+            {hiddenPreviewElements?.actionPill ? null : <Overlay />}
           </Box>
         )}
         {!metaData.imageUrl &&
@@ -448,9 +448,9 @@ export const UrlPreview = ({
   // Intentionally kept portrait and square same as the image is square to maintain the width. Design review item
   const imageContainerClass = orientation
     ? {
-        square: "aspect-square w-[128px]",
-        portrait: "aspect-square w-[128px]",
-        landscape: "aspect-video w-[360px]",
+        square: "aspect-square w-full max-w-[8rem]", // 128px
+        portrait: "aspect-square w-full max-w-[8rem]", // 128px
+        landscape: "aspect-video w-full max-w-[22.5rem]", // 360px
       }[orientation]
     : "";
 
