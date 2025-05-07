@@ -1,8 +1,16 @@
-import { useEffect, useState } from 'react';
-import type { Orientation, UrlPreviewData } from './types';
-import { extractYouTubeVideoId, fetchUrlMetaData, getYoutubeThumbnailUrl, UrlPreviewSources } from './utils';
+import { useEffect, useState } from "react";
+import type { Orientation, UrlPreviewData } from "./types";
+import {
+  extractYouTubeVideoId,
+  fetchUrlMetaData,
+  getYoutubeThumbnailUrl,
+  UrlPreviewSources,
+} from "./utils";
 
-export function useImageOrientation(imageUrl: string | undefined, fallback: Orientation): Orientation {
+export function useImageOrientation(
+  imageUrl: string | undefined,
+  fallback: Orientation
+): Orientation {
   const [orientation, setOrientation] = useState<Orientation>(fallback);
 
   useEffect(() => {
@@ -15,16 +23,16 @@ export function useImageOrientation(imageUrl: string | undefined, fallback: Orie
       const { width, height } = img;
 
       if (width === height) {
-        setOrientation('square');
+        setOrientation("square");
       } else if (width > height) {
-        setOrientation('landscape');
+        setOrientation("landscape");
       } else {
-        setOrientation('portrait');
+        setOrientation("portrait");
       }
     };
 
     img.onerror = () => {
-      console.error('Failed to load image:', imageUrl);
+      console.error("Failed to load image:", imageUrl);
       setOrientation(null);
     };
   }, [imageUrl]);
@@ -36,11 +44,15 @@ export function useImageOrientation(imageUrl: string | undefined, fallback: Orie
 const metaDataCache = new Map<
   string,
   {
-    metaData: UrlPreviewData;
+    metaData: UrlPreviewData | null;
   }
 >();
 
-export const useUrlMetaData = (previewUrl: string, accessToken: string, metadataApiUrl: string) => {
+export const useUrlMetaData = (
+  previewUrl: string,
+  accessToken: string,
+  metadataApiUrl: string
+) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [metaData, setMetaData] = useState<UrlPreviewData | null>(null);
 
@@ -58,7 +70,11 @@ export const useUrlMetaData = (previewUrl: string, accessToken: string, metadata
 
       setIsLoading(true);
       try {
-        const data = await fetchUrlMetaData(previewUrl, accessToken, metadataApiUrl);
+        const data = await fetchUrlMetaData(
+          previewUrl,
+          accessToken,
+          metadataApiUrl
+        );
         const { data: apiResponse, ok } = data;
         if (apiResponse?.urlMeta && ok) {
           const urlMetaDataArray = Object.values(apiResponse.urlMeta);
@@ -67,7 +83,7 @@ export const useUrlMetaData = (previewUrl: string, accessToken: string, metadata
             const source = urlMetaData.source;
             if (source === UrlPreviewSources.YOUTUBE) {
               const videoId = extractYouTubeVideoId(previewUrl);
-              const imageUrl = videoId ? getYoutubeThumbnailUrl(videoId) : '';
+              const imageUrl = videoId ? getYoutubeThumbnailUrl(videoId) : "";
               urlMetaData.imageUrl = imageUrl;
             }
             setMetaData(urlMetaData);
@@ -78,6 +94,10 @@ export const useUrlMetaData = (previewUrl: string, accessToken: string, metadata
           }
         } else {
           setMetaData(null);
+          // Cache the result
+          metaDataCache.set(previewUrl, {
+            metaData: null,
+          });
         }
       } catch (err: unknown) {
         console.error(err);
