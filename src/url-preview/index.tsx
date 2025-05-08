@@ -170,7 +170,7 @@ const Overlay = () => {
   return (
     <Box
       as="div"
-      className="pointer-events-none absolute inset-0 z-10 bg-[#000000] bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-50"
+      className="pointer-events-none absolute inset-0 z-0 bg-[#000000] bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-50"
     ></Box>
   );
 };
@@ -352,7 +352,7 @@ const SingleColumnLayout = ({
               <ActionPill
                 metaData={metaData}
                 actionPillOptions={actionPillOptions}
-                className={`absolute bottom-2 right-2 z-50 ${
+                className={`absolute bottom-2 right-2 z-10 ${
                   isHovered ? "" : "hidden"
                 }`}
                 data-testid="action-pill"
