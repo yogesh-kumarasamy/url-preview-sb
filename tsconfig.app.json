@@ -23,5 +23,5 @@
     "noUncheckedSideEffectImports": true,
     "types": ["vitest/globals"]
   },
-  "include": ["src"]
+  "include": ["vite-env.d.ts", "src", ".storybook"]
 }

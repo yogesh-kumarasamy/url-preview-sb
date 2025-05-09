@@ -10,7 +10,21 @@ import * as MockData from "../msw/mocks/mockDataForUrlPreviewComponent";
 
 import { getMetaDataEndpoint } from "../src/util";
 
-initialize();
+if (import.meta.env.PROD) {
+  initialize({
+    serviceWorker: {
+      url: "/url-preview-sb/storybook-static/mockServiceWorker.js",
+      options: {
+        // The scope defines the URL prefix that the service worker will control.
+        // Here it will only control URLs under "/storybook-static/"
+        scope: "/url-preview-sb/storybook-static/",
+      },
+    },
+  });
+} else {
+  // In development, initialize normally (or skip service worker registration)
+  initialize();
+}
 
 const globalHandlers = [
   http.post(getMetaDataEndpoint("staging"), async ({ request }) => {
